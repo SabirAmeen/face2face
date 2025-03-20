@@ -23,7 +23,6 @@ onMounted(() => {
   })
   peer.on('call', function (call) {
     // Answer the call, providing our mediaStream
-    console.log('call')
     call.answer(currMediaStream.value)
     call.on('stream', function (stream) {
       // `stream` is the MediaStream of the remote peer.
@@ -40,7 +39,12 @@ onMounted(() => {
       if (callVideoRef?.value) callVideoRef.value.srcObject = stream
       currMediaStream.value = stream
       if (route.params.id !== sessionStorage.getItem('peerKey')) {
-        peer.call(route.params.id as string, stream)
+        const call = peer.call(route.params.id as string, stream)
+        call.on('stream', function (stream) {
+          // `stream` is the MediaStream of the remote peer.
+          // Here you'd add it to an HTML video/canvas element.
+          if (receiveVideoRef?.value) receiveVideoRef.value.srcObject = stream
+        })
       }
     })
 })
@@ -56,7 +60,6 @@ onMounted(() => {
           class="absolute right-0 bottom-0 w-[400px] h-[400px]"
           autoplay
           ref="receive-ref"
-          muted
         ></video>
       </section>
     </section>
