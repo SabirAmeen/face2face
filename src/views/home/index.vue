@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const onNewMeeting = () => {
-  router.push('/meeting/asdasdasd')
+  router.push('/meeting')
 }
 </script>
 
